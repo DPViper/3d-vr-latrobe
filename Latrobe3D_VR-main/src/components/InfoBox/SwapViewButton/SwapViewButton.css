@@ -1,0 +1,49 @@
+.SwapViewButton {
+    height: 7.5%;
+    min-height:5%;
+    width: 100%;
+    border-radius: 0 0 8px 0;
+    background-color: var(--red-button-colour-up);
+    cursor: pointer;
+    display:flex;
+    align-content:center;
+}
+
+.SwapViewButton:hover {
+    background-color: var(--red-button-colour-hover);
+}
+
+.SwapViewButton:active {
+    background-color: var(--red-button-colour-active);
+}
+
+.SwapViewButton #Label {
+    color:#ffffff;
+    margin:auto;
+    user-select: none;
+    text-align:center;
+    font-size:x-large;
+}
+
+/* Mobile Layout Options */
+@media only screen and (max-width:550px) {
+    .SwapViewButton {
+        height: 50px;
+        min-height:unset;
+        width: 100%;
+        bottom:0px;
+        border-radius: 0 0 8px 0;
+        background-color: var(--red-button-colour-up);
+        cursor: pointer;
+        display:unset;
+        position:fixed;
+    }
+
+    .SwapViewButton #Label {
+        color:#ffffff;
+        margin:auto;
+        user-select: none;
+        text-align:center;
+        font-size:x-large;
+    }
+}

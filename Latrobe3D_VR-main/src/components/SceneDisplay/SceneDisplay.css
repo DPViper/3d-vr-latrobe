@@ -1,0 +1,17 @@
+#scene-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width:100%;
+    transition:height ease 0.25s;
+}
+
+.fullscreen {
+    width: 100%;
+}
+
+@media only screen and (max-width:550px) {
+    .windowed {
+        width: 100%;
+    }
+}

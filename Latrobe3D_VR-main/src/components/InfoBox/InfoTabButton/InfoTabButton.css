@@ -1,0 +1,43 @@
+#InfoTabButton {
+    position: absolute;
+    height: 60px;
+    width: 65px;
+    right: -65px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: var(--red-button-colour-up);
+}
+
+#InfoTabButton:hover {
+    background-color: var(--red-button-colour-hover);
+}
+
+#InfoTabButton:active {
+    background-color: var(--red-button-colour-active);
+}
+
+#InfoTabButton img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+
+@media only screen and (max-width:550px) {
+    #InfoTabButton {
+        position: fixed;
+        height: 50px;
+        width: 100%;
+        right: 0px;
+        bottom: 350px;
+        padding: 10px;
+        cursor: pointer;
+        background-color: var(--red-button-colour-up);
+        border-radius: 0px;
+        transition : all ease 0.25s
+    }
+
+    #InfoTabButton.opened {
+        height: 50px;
+    }
+}

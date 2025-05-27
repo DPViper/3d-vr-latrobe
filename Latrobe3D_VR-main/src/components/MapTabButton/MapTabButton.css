@@ -1,0 +1,53 @@
+#MapTabButton {
+    height: 60px;
+    width: 180px;
+    position:relative;
+    left: -115px;
+    padding: 10px;
+    background-color: var(--red-button-colour-up);
+    justify-content:flex-end;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    column-gap:20px;
+}
+
+
+#MapTabButton:hover {
+    background-color: var(--red-button-colour-hover);
+    transform: translateX(115px);
+}
+
+#MapTabButton:active {
+    background-color: var(--red-button-colour-active);
+}
+
+#MapTabButton img {
+    flex: 0 0 auto;
+    height:100%;
+}
+
+#MapTabButton h1 {
+    flex: 0 0 auto;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    user-select: none;
+    align-self: center;
+}
+
+/* Mobile Layout Options */
+@media only screen and (max-width:550px) {
+    #MapTabButton {
+        display:none;
+        height: 60px;
+        width: 100%;
+        position:fixed;
+        bottom:0px;
+        padding: 10px;
+        background-color: var(--red-button-colour-up);
+        justify-content:flex-end;
+        cursor: pointer;
+        transition: transform 0.25s ease;
+        column-gap:20px;
+    }
+}

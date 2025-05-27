@@ -1,0 +1,52 @@
+#RibbonHeader {
+    display: flex;
+    height: 60px;
+    width: 550px;
+    padding: 10px;
+    background-color: var(--red-button-colour-up);
+    justify-content: space-around;
+}
+
+#RibbonHeader a {
+    height: 100%;
+    user-select: none;
+}
+
+#RibbonHeader img {
+    display: block;
+    height: 100%;
+    align-self: center;
+}
+
+#RibbonHeader h1 {
+    margin:0;
+    text-align: center;
+    align-self: center;
+    font-size: 18px;
+    color: white;
+    user-select: none;
+}
+
+
+@media only screen and (max-width: 550px) {
+    #RibbonHeader {
+        position:fixed;
+        top:0px;
+        display: flex;
+        height: 75px;
+        width: 100%;
+        padding: 10px;
+        background-color: var(--red-button-colour-up);
+        justify-content: space-around;
+        border-radius:0px;
+    }
+
+    #RibbonHeader a {
+        display:contents;
+    }
+
+    #RibbonHeader img {
+        display:inline;
+        height:20px;
+    }
+}

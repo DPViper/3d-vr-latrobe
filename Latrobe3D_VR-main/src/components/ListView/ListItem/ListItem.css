@@ -1,0 +1,36 @@
+.ListItem {
+    display: flex;
+    height:45px;
+    width:100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.ListItem:hover {
+    background-color: #D0D0D0;
+}
+
+.ListItem:active {
+    background-color: #A0A0A0;
+}
+
+.ListItem #Label {
+    color:#333333;
+    user-select: none;
+}
+
+@media only screen and (max-width:550px) {
+    .ListItem #Label {
+        color:#333333;
+        user-select: none;
+        font-size:large;
+        font-weight: bold;
+    }
+}

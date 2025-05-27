@@ -1,0 +1,12 @@
+.ListView {
+    width: 100%;
+    height: 5%;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow-y: scroll;
+    background-color: #383838;
+
+    flex: 1 1 auto;
+    justify-content:start;
+}

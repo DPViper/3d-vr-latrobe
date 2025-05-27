@@ -1,0 +1,28 @@
+@import "./styles/fonts.css";
+
+:root {
+    --red-button-colour-up: #E22333;
+    --red-button-colour-hover: #CB1A29;
+    --red-button-colour-active: #B51725;
+
+    --mobile-screen-max-width: 550px;
+}
+
+* {
+    font-family: 'DM Sans', Times, Helvetica, sans-serif;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    background-color: #333333;
+    color: #ffffff;
+    height: inherit;
+    margin: 0;
+}
+
+#root {
+    height: inherit;
+}
