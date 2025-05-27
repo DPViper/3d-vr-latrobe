@@ -1,0 +1,97 @@
+[
+    {
+        "id": 1,
+        "name": "Graduate House - East",
+        "code": "NR7",
+        "closest_car_park": "CP8",
+        "filepath": "NR7.splat",
+        "pos": [
+            50,
+            0,
+            0
+        ],
+        "rot": [
+            0,
+            0,
+            0
+        ],
+        "constructed": 1970,
+        "description": "An old accommodation, when it was still in use, the rent wasn't this high if you ask."
+    },
+    {
+        "id": 2,
+        "name": "Jenny Graves",
+        "code": "JG",
+        "closest_car_park": "VCP",
+        "filepath": "JG.splat",
+        "pos": [
+            0,
+            -0.5,
+            3
+        ],
+        "rot": [
+            0,
+            0,
+            0
+        ],
+        "constructed": 2024,
+        "description": "Formerly Thomas Cherry, the upgrade of the building in 2024 involved adaptive reuse of the existing 1960 structure with new facade glazing and fabric, roof, lift shaft and stair well that transformed it into into a new innovation precinct."
+    },
+    {
+        "id": 3,
+        "name": "Dante's Divine Comedy",
+        "code": "JG-BST",
+        "closest_car_park": "VCP",
+        "filepath": "JG-BST.splat",
+        "pos": [
+            0,
+            0,
+            0
+        ],
+        "rot": [
+            0,
+            0,
+            0
+        ],
+        "constructed": 1983,
+        "description": "Sculpted by Bart Sanciolo across 1980 to 1983. The bronze depicts scenes from Dante's work. It was installed at the University in 1987, and is adjacent to the Thomas Cherry Building, and proximate to the Physical Sciences Building. The sculpture was provided by the Italian community, and draws on the most famous text from Italy's most celebrated author.\n A weird Pyramid, definitely has nothing to do with mummies..."
+    },
+    {
+        "id": 4,
+        "name": "Bus Stops",
+        "code": "BST",
+        "closest_car_park": "VCP",
+        "filepath": "BST.splat",
+        "pos": [
+            -1.85,
+            0,
+            -7.5
+        ],
+        "rot": [
+            0,
+            0,
+            0
+        ],
+        "constructed": 1970,
+        "description": "And always remember to touch on your myki at the start of your journey."
+    },
+    {
+        "id": 5,
+        "name": "John Scott Meeting House",
+        "code": "JSM",
+        "closest_car_park": "CP7A",
+        "filepath": "JSM.splat",
+        "pos": [
+            0,
+            0,
+            50
+        ],
+        "rot": [
+            0,
+            0,
+            0
+        ],
+        "constructed": 1993,
+        "description": "Named after a Cambridge University alumni John Fraser Scott, who was the second vice-chancellor of the university during its difficult period after years of expansion as there were no funds, no growth and static enrolments.\n However, under his leadership, La Trobe was still able to move forward with higher degree student numbers doubled, research increased, teaching improved and courses were diversified. Two new schools were established, new departments were established, and new fields undertaken such as Italian and computer science."
+    }
+]
