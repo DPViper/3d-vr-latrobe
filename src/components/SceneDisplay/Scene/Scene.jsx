@@ -15,7 +15,6 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
     const [minimalBoundingBoxes, setMinimalBoundingBoxes] = useState([])
     const { splatData } = useContext(SceneContext)
     const splatParentRefs = useRef([])
-    const { isPresenting } = useXR()
 
     function generateBoundingBoxes(squareLimit = Infinity) {
         return splatParentRefs.current.map((splatParentRef, idx) => {
@@ -107,10 +106,11 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
 function CameraRig({ splats, targetBuildingID, boundingBoxes }) {
     const { camera } = useThree()
     const controls = useRef()
+    const { isPresenting } = useXR()
 
     // Change focus and dolly the camera toward the target when it changes
     useEffect(() => {
-        if (boundingBoxes.length !== 0) {
+        if (!isPresenting && boundingBoxes.length !== 0) {
             const target = splats[targetBuildingID - 1]
             const targetPosition = new Vector3(target.pos[0], target.pos[1], target.pos[2])
 
