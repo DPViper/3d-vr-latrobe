@@ -4,6 +4,9 @@ import { OrbitControls, Splat, Sky, Billboard, Text, Image } from '@react-three/
 import { Vector3, MOUSE } from 'three'
 import { SceneContext } from '@/SceneContext.jsx'
 import { UIContext } from '@/UIContext.jsx'
+import { Canvas } from '@react-three/fiber'
+import { XR } from '@react-three/xr'
+import { useXR } from '@react-three/xr'
 import gsap from 'gsap'
 
 export default function Scene({ targetBuildingID, setTargetBuildingID }) {
@@ -12,6 +15,7 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
     const [minimalBoundingBoxes, setMinimalBoundingBoxes] = useState([])
     const { splatData } = useContext(SceneContext)
     const splatParentRefs = useRef([])
+    const { isPresenting } = useXR()
 
     function generateBoundingBoxes(squareLimit = Infinity) {
         return splatParentRefs.current.map((splatParentRef, idx) => {
@@ -64,37 +68,39 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
     }, [splatLoaded])
 
     return (
-        <>
-            <CameraRig
-                splats={splatData}
-                targetBuildingID={targetBuildingID}
-                boundingBoxes={boundingBoxes}
-            />
-
-            <Sky />
-
-            {splatData.map((splat) => (
-                <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
-                    <Splat
-                        src={"/splats/" + splat.filepath}
-                        position={splat.pos}
-                        rotation={splat.rot}
-                    />
-                </group>
-            ))}
-
-            {splatData.map((splat) => (
-                <WaypointMarker
-                    key={splat.id}
-                    buildingID={splat.id}
+        <Canvas camera={{ fov: 75, near: 0.1, far: 1000 }}>
+            <XR>
+                <CameraRig
+                    splats={splatData}
                     targetBuildingID={targetBuildingID}
-                    setTargetBuildingID={setTargetBuildingID}
-                    position={splat.pos}
-                    boundingBox={minimalBoundingBoxes[splat.id - 1]}
-                    text={splat.name}
+                    boundingBoxes={boundingBoxes}
                 />
-            ))}
-        </>
+
+                <Sky />
+
+                {splatData.map((splat) => (
+                    <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
+                        <Splat
+                            src={"/splats/" + splat.filepath}
+                            position={splat.pos}
+                            rotation={splat.rot}
+                        />
+                    </group>
+                ))}
+
+                {splatData.map((splat) => (
+                    <WaypointMarker
+                        key={splat.id}
+                        buildingID={splat.id}
+                        targetBuildingID={targetBuildingID}
+                        setTargetBuildingID={setTargetBuildingID}
+                        position={splat.pos}
+                        boundingBox={minimalBoundingBoxes[splat.id - 1]}
+                        text={splat.name}
+                    />
+                ))}
+            </XR>
+        </Canvas>
     )
 }
 
@@ -142,24 +148,28 @@ function CameraRig({ splats, targetBuildingID, boundingBoxes }) {
     }, [targetBuildingID, boundingBoxes])
 
     return (
-        <OrbitControls
-            enableDamping={true}
-            screenSpacePanning={false}
-            maxPolarAngle={Math.PI / 2.3}
-            minDistance={1}
-            maxDistance={20}
-            enablePan={true}
-            enableRotate={true}
-            enableZoom={true}
-            mouseButtons={{
-                LEFT: MOUSE.PAN,
-                MIDDLE: MOUSE.ROTATE,
-                RIGHT: MOUSE.ROTATE,
-            }}
-            rotateSpeed={1}
-            dampingFactor={1}
-            ref={controls}
-        />
+        <>
+            {!isPresenting && (
+                <OrbitControls
+                    enableDamping={true}
+                    screenSpacePanning={false}
+                    maxPolarAngle={Math.PI / 2.3}
+                    minDistance={1}
+                    maxDistance={20}
+                    enablePan={true}
+                    enableRotate={true}
+                    enableZoom={true}
+                    mouseButtons={{
+                        LEFT: MOUSE.PAN,
+                        MIDDLE: MOUSE.ROTATE,
+                        RIGHT: MOUSE.ROTATE,
+                    }}
+                    rotateSpeed={1}
+                    dampingFactor={1}
+                    ref={controls}
+                />
+            )}
+        </>
     )
 }
 
