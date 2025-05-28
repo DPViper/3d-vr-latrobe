@@ -6,7 +6,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [VitePWA()],
+    plugins: [
+        VitePWA(),
+        react({
+            jsxRuntime: 'automatic'
+        })
+    ],
     server: {
         proxy: {
             '/api': {
@@ -23,5 +28,8 @@ export default defineConfig({
             '@splats': path.resolve(__dirname, 'public/splats'),
             '@components': path.resolve(__dirname, 'src/components')
         }
+    },
+    build: {
+        target: 'esnext'
     }
 })
