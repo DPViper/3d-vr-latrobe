@@ -54,7 +54,7 @@ export default function SceneDisplay() {
             <Canvas
                 flat
                 gl={{ antialias: false }}
-                dpr={[0.5, 2.5]}
+                dpr={[0.5, 1]}
                 camera={{ fov: 60, position: [0, 3, 0] }}>
                 <XR store={store}>
                     <AdaptiveDpr pixelated />
