@@ -14,6 +14,7 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
     const [error, setError] = useState(null)
     const { splatData } = useContext(SceneContext)
     const splatParentRefs = useRef([])
+    const { isPresenting } = useXR()
 
     function generateBoundingBoxes(squareLimit = Infinity) {
         return splatParentRefs.current.map((splatParentRef, idx) => {
@@ -72,6 +73,10 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
         return <Text position={[0, 0, 0]} color="red">{error}</Text>
     }
 
+    if (!splatData || splatData.length === 0) {
+        return <Text position={[0, 2, 0]} color="red">No splat data loaded</Text>;
+    }
+
     return (
         <>
             <CameraRig
@@ -80,7 +85,10 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
                 boundingBoxes={boundingBoxes}
             />
 
-            <Sky />
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[10, 10, 5]} intensity={1} />
+
+            <Sky sunPosition={[100, 100, 20]} />
 
             {splatData.map((splat) => (
                 <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
@@ -108,11 +116,40 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
 }
 
 function CameraRig({ splats, targetBuildingID, boundingBoxes }) {
-    const { camera } = useThree()
+    const { camera, gl } = useThree()
     const controls = useRef()
     const { isPresenting } = useXR()
+    const movementSpeed = 0.05 // Adjust for comfort
 
-    // Change focus and dolly the camera toward the target when it changes
+    // Set initial camera position when entering VR
+    useEffect(() => {
+        if (isPresenting) {
+            camera.position.set(0, 1.6, 5) // Set to typical eye height
+            camera.lookAt(0, 1.6, 0)
+        }
+    }, [isPresenting])
+
+    // Improved VR movement workaround using Three.js renderer's XR session
+    useFrame(() => {
+        if (!isPresenting) return
+        const session = gl.xr && gl.xr.getSession ? gl.xr.getSession() : null
+        if (!session) return
+        const inputSources = Array.from(session.inputSources || [])
+        const rightController = inputSources.find(src => src.handedness === 'right' && src.gamepad)
+        if (rightController && rightController.gamepad && rightController.gamepad.axes.length >= 2) {
+            const [x, y] = rightController.gamepad.axes
+            // Deadzone
+            if (Math.abs(x) > 0.1 || Math.abs(y) > 0.1) {
+                // Forward/backward (y), left/right (x)
+                const forward = camera.getWorldDirection(new Vector3()).setY(0).normalize()
+                const right = new Vector3().crossVectors(forward, camera.up).normalize()
+                camera.position.add(forward.multiplyScalar(-y * movementSpeed))
+                camera.position.add(right.multiplyScalar(x * movementSpeed))
+            }
+        }
+    })
+
+    // Only handle OrbitControls for non-VR
     useEffect(() => {
         if (!isPresenting && boundingBoxes.length !== 0) {
             const target = splats[targetBuildingID - 1]
@@ -149,7 +186,7 @@ function CameraRig({ splats, targetBuildingID, boundingBoxes }) {
                 ease: 'power3.inOut',
             })
         }
-    }, [targetBuildingID, boundingBoxes])
+    }, [isPresenting, targetBuildingID, boundingBoxes])
 
     return (
         <>
