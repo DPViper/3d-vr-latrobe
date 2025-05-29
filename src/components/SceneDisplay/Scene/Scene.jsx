@@ -90,20 +90,9 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
 
             <Sky sunPosition={[100, 100, 20]} />
 
-            {/* Render only the first splat model for performance testing */}
-            {splatData[0] && (
-                <group ref={el => splatParentRefs.current[0] = el}>
-                    <Splat
-                        src={"/splats/" + splatData[0].filepath}
-                        position={splatData[0].pos}
-                        rotation={splatData[0].rot}
-                    />
-                </group>
-            )}
-
-            {/*
-            {splatData.map((splat) => (
-                <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
+            {/* WARNING: Rendering all splat models may cause lag if there are many models! */}
+            {splatData.map((splat, idx) => (
+                <group key={splat.id} ref={el => splatParentRefs.current[idx] = el}>
                     <Splat
                         src={"/splats/" + splat.filepath}
                         position={splat.pos}
@@ -112,7 +101,7 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
                 </group>
             ))}
 
-            {splatData.map((splat) => (
+            {splatData.map((splat, idx) => (
                 <WaypointMarker
                     key={splat.id}
                     buildingID={splat.id}
@@ -123,7 +112,6 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
                     text={splat.name}
                 />
             ))}
-            */}
         </>
     )
 }
