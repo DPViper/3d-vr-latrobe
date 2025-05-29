@@ -1,15 +1,35 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import { VitePWA } from 'vite-plugin-pwa';
-//import { path } from 'express/lib/application'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        VitePWA(),
         react({
             jsxRuntime: 'automatic'
+        }),
+        VitePWA({
+            registerType: 'autoUpdate',
+            includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+            manifest: {
+                name: 'Latrobe 3D VR',
+                short_name: 'Latrobe3D',
+                description: '3D VR Experience for La Trobe University',
+                theme_color: '#ffffff',
+                icons: [
+                    {
+                        src: 'pwa-192x192.png',
+                        sizes: '192x192',
+                        type: 'image/png'
+                    },
+                    {
+                        src: 'pwa-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png'
+                    }
+                ]
+            }
         })
     ],
     server: {

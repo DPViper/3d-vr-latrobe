@@ -1,13 +1,45 @@
 #scene-display {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-    transition:height ease 0.25s;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
-.fullscreen {
-    width: 100%;
+#scene-display.fullscreen {
+    height: 100vh;
+}
+
+#scene-display.windowed {
+    height: 70vh;
+}
+
+.vr-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid #E2231B;
+    border-radius: 5px;
+    color: #E2231B;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.vr-button:hover {
+    background-color: #E2231B;
+    color: white;
+}
+
+.vr-button:active {
+    transform: scale(0.95);
+}
+
+/* Ensure the canvas takes up the full container */
+#scene-display canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 @media only screen and (max-width:550px) {

@@ -4,29 +4,28 @@ import { OrbitControls, Splat, Sky, Billboard, Text, Image } from '@react-three/
 import { Vector3, MOUSE } from 'three'
 import { SceneContext } from '@/SceneContext.jsx'
 import { UIContext } from '@/UIContext.jsx'
-import { Canvas } from '@react-three/fiber'
-import { XR } from '@react-three/xr'
 import { useXR } from '@react-three/xr'
 import gsap from 'gsap'
 
 export default function Scene({ targetBuildingID, setTargetBuildingID }) {
-    const [splatLoaded, setsplatLoaded] = useState()
+    const [splatLoaded, setSplatLoaded] = useState(false)
     const [boundingBoxes, setBoundingBoxes] = useState([])
     const [minimalBoundingBoxes, setMinimalBoundingBoxes] = useState([])
+    const [error, setError] = useState(null)
     const { splatData } = useContext(SceneContext)
     const splatParentRefs = useRef([])
 
     function generateBoundingBoxes(squareLimit = Infinity) {
         return splatParentRefs.current.map((splatParentRef, idx) => {
+            if (!splatParentRef || !splatParentRef.children[0]) return null;
+            
             const splat = splatParentRef.children[0]
             const splatPositions = splat.material.centerAndScaleTexture.source.data.data
 
             let minX = Infinity
             let maxX = -Infinity
-
             let minY = Infinity
             let maxY = -Infinity
-
             let minZ = Infinity
             let maxZ = -Infinity
 
@@ -35,71 +34,76 @@ export default function Scene({ targetBuildingID, setTargetBuildingID }) {
                 const y = splatPositions[i + 1]
                 const z = splatPositions[i + 2]
 
-                // Limit to a square boundary
                 if ((x > -squareLimit && x < squareLimit) && (z > -squareLimit && z < squareLimit)) {
                     if (x < minX) minX = x
                     if (x > maxX) maxX = x
-
                     if (y < minY) minY = y
                     if (y > maxY) maxY = y
-
                     if (z < minZ) minZ = z
                     if (z > maxZ) maxZ = z
                 }
             }
 
             return { idx: idx, minX: minX, maxX: maxX, minY: minY, maxY: maxY, minZ: minZ, maxZ: maxZ }
-        })
+        }).filter(box => box !== null)
     }
 
-    // Generate boundingBoxes
     useEffect(() => {
-        setsplatLoaded(splatParentRefs.current)  // Cause re-render on splats load
-
-        // Check if data loaded
-        if (splatLoaded) {
-            const generatedBoundingBoxes = generateBoundingBoxes()
-            const generatedMinimalBoundingBoxes = generateBoundingBoxes(0.1)
-
-            setBoundingBoxes(generatedBoundingBoxes)
-            setMinimalBoundingBoxes(generatedMinimalBoundingBoxes)
+        if (splatParentRefs.current.length > 0) {
+            setSplatLoaded(true)
         }
-    }, [splatLoaded])
+    }, [splatParentRefs.current])
+
+    useEffect(() => {
+        if (splatLoaded && splatData) {
+            try {
+                const generatedBoundingBoxes = generateBoundingBoxes()
+                const generatedMinimalBoundingBoxes = generateBoundingBoxes(0.1)
+                setBoundingBoxes(generatedBoundingBoxes)
+                setMinimalBoundingBoxes(generatedMinimalBoundingBoxes)
+            } catch (err) {
+                console.error('Error generating bounding boxes:', err)
+                setError('Failed to process 3D models')
+            }
+        }
+    }, [splatLoaded, splatData])
+
+    if (error) {
+        return <Text position={[0, 0, 0]} color="red">{error}</Text>
+    }
 
     return (
-        <Canvas camera={{ fov: 75, near: 0.1, far: 1000 }}>
-            <XR>
-                <CameraRig
-                    splats={splatData}
-                    targetBuildingID={targetBuildingID}
-                    boundingBoxes={boundingBoxes}
-                />
+        <>
+            <CameraRig
+                splats={splatData}
+                targetBuildingID={targetBuildingID}
+                boundingBoxes={boundingBoxes}
+            />
 
-                <Sky />
+            <Sky />
 
-                {splatData.map((splat) => (
-                    <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
-                        <Splat
-                            src={"/splats/" + splat.filepath}
-                            position={splat.pos}
-                            rotation={splat.rot}
-                        />
-                    </group>
-                ))}
-
-                {splatData.map((splat) => (
-                    <WaypointMarker
-                        key={splat.id}
-                        buildingID={splat.id}
-                        targetBuildingID={targetBuildingID}
-                        setTargetBuildingID={setTargetBuildingID}
+            {splatData.map((splat) => (
+                <group key={splat.id} ref={el => splatParentRefs.current[splat.id - 1] = el}>
+                    <Splat
+                        src={"/splats/" + splat.filepath}
                         position={splat.pos}
-                        boundingBox={minimalBoundingBoxes[splat.id - 1]}
-                        text={splat.name}
+                        rotation={splat.rot}
                     />
-                ))}
-            </XR>
-        </Canvas>
+                </group>
+            ))}
+
+            {splatData.map((splat) => (
+                <WaypointMarker
+                    key={splat.id}
+                    buildingID={splat.id}
+                    targetBuildingID={targetBuildingID}
+                    setTargetBuildingID={setTargetBuildingID}
+                    position={splat.pos}
+                    boundingBox={minimalBoundingBoxes[splat.id - 1]}
+                    text={splat.name}
+                />
+            ))}
+        </>
     )
 }
 
